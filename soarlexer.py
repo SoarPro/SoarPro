@@ -72,6 +72,18 @@ class SoarLexer:
         # And also don't forget to advance to the next token with the advance method
         tokens.append(Token(TT_DIV, self.pos))
         self.advance()
+      elif self.current_char == "(":
+        # If found update the tokens list
+        # Append the token with the coding instance class created in the SoarTokens class
+        # And also don't forget to advance to the next token with the advance method
+        tokens.append(Token(TT_LPAREN, self.pos))
+        self.advance()
+      elif self.current_char == ")":
+        # If found update the tokens list
+        # Append the token with the coding instance class created in the SoarTokens class
+        # And also don't forget to advance to the next token with the advance method
+        tokens.append(Token(TT_RPAREN, self.pos))
+        self.advance()
       elif self.current_char in DIGITS:
         # For this we would call the make number function below
         # to get the kind of number we are trying to tokenize
