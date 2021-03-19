@@ -7,7 +7,7 @@ result to the user.
 ####################################################
 #################### Import ########################
 ####################################################
-
+from run import *
 
 ####################################################
 #################### Shell #########################
@@ -48,4 +48,9 @@ production standard!!
 
     # This happens if the user inputs a normal code. e.g: x = 32;
     else:
-        print(text)
+        result, error = run(text)
+
+        if error:
+            print(error.as_string)
+        else:
+            print(result)

@@ -37,6 +37,7 @@ class SoarLexer:
   # The method belows recognises the tokens and validate them
   def tokenize(self):
     tokens = [] # Store whatever token found in this list
+    error = None # we store error
 
     # Create a while loop that continues until the current character turns to None. Don't forget that the current character only turns to none if we are at the end of the file
     while self.current_char != None:
@@ -68,6 +69,51 @@ class SoarLexer:
         # And also don't forget to advance to the next token with the advance method
         tokens.append(Token(TT_DIV, self.pos))
         self.advance()
+      elif self.current_char in DIGITS:
+        # For this we would call the make number function below
+        # to get the kind of number we are trying to tokenize
+        tokens.append(self.make_number())
+
+    return tokens, error
+
+  def make_number(self):
+    # We will first save the number as a string and change it to 
+    # either a float or an integer later
+    num_string = ""
+    
+    # We would also have to keep track of the dots... If there is any dot
+    # it instead returns a float type token
+    # And if also it is more than one it returns an error because
+    # We cannot have more than one dot in a float
+    dot_count = 0
+
+    # Run a while loop as far as the current character is not none and 
+    # and it is in digits or it is a dot
+
+    while self.current_char != None and self.current_char in DIGITS + ".":
+      # Check if it is a dot
+      # If it is a dot add it to the num string and increase
+      # The dot_count variable
+      # If the dot_count variable is greater than 0 break
+      if self.current_char == ".":
+        if dot_count > 1:
+          return "error"
+        else:
+          dot_count += 1
+          num_string += self.current_char
+      else:
+        num_string += self.current_char
+
+      # We shouldn't forget to advance to the next character
+      self.advance()
+
+    # We would now return either a float type token or an int type depending
+    # on the dot_count
+    if dot_count == 1:
+      return Token(TT_FLOAT, self.pos, num_string)
+
+    else:
+      return Token(TT_INT, self.pos, num_string)
 
       
         
