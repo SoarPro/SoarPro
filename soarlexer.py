@@ -41,13 +41,33 @@ class SoarLexer:
     # Create a while loop that continues until the current character turns to None. Don't forget that the current character only turns to none if we are at the end of the file
     while self.current_char != None:
       # The condition below Ignore spaces and tabs
-      if current_char in " \t":
+      if self.current_char in " \t":
         self.advance() # Call the advance method that moves to the next character
       # Condition to see if the current character is a plus sign
-      elif current_char == "+":
+      elif self.current_char == "+":
         # If found update the tokens list
         # Append the token with the coding instance class created in the SoarTokens class
         # And also don't forget to advance to the next token with the advance method
         tokens.append(Token(TT_PLUS, self.pos))
         self.advance()
+      elif self.current_char == "-":
+        # If found update the tokens list
+        # Append the token with the coding instance class created in the SoarTokens class
+        # And also don't forget to advance to the next token with the advance method
+        tokens.append(Token(TT_MINUS, self.pos))
+        self.advance()
+      elif self.current_char == "*":
+        # If found update the tokens list
+        # Append the token with the coding instance class created in the SoarTokens class
+        # And also don't forget to advance to the next token with the advance method
+        tokens.append(Token(TT_MUL, self.pos))
+        self.advance()
+      elif self.current_char == "/":
+        # If found update the tokens list
+        # Append the token with the coding instance class created in the SoarTokens class
+        # And also don't forget to advance to the next token with the advance method
+        tokens.append(Token(TT_DIV, self.pos))
+        self.advance()
+
+      
         
