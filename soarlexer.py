@@ -76,14 +76,14 @@ class SoarLexer:
         # For this we would call the make number function below
         # to get the kind of number we are trying to tokenize
         result , err = self.make_number()
-
         if err:
           error = FloatError(self.pos)
-
-
         else:
           tokens.append(result)
 
+      else:
+        error = BadCharacterError(self.pos, self.current_char)
+        break
     return tokens, error
 
   def make_number(self):
@@ -96,6 +96,7 @@ class SoarLexer:
     # And if also it is more than one it returns an error because
     # We cannot have more than one dot in a float
     dot_count = 0
+    error = None
 
     # Run a while loop as far as the current character is not none and 
     # and it is in digits or it is a dot
@@ -106,8 +107,9 @@ class SoarLexer:
       # The dot_count variable
       # If the dot_count variable is greater than 0 break
       if self.current_char == ".":
-        if dot_count > 1:
-          return "error"
+        if dot_count == 1:
+          error = "There is an error"
+          
         else:
           dot_count += 1
           num_string += self.current_char
@@ -119,11 +121,11 @@ class SoarLexer:
 
     # We would now return either a float type token or an int type depending
     # on the dot_count
-    if dot_count > 0:
+    if error:
+      return None, error
+
+    elif dot_count > 0:
       return Token(TT_FLOAT, self.pos, num_string), None
 
     else:
       return Token(TT_INT, self.pos, num_string), None
-
-      
-        

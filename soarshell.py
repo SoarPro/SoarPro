@@ -51,6 +51,6 @@ production standard!!
         result, error = run(text)
 
         if error:
-            print(error.as_string)
+            print(error.as_string())
         else:
             print(result)
