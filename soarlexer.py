@@ -8,9 +8,12 @@ result to the user.
 #################### Import ########################
 ####################################################
 from soartokens import *
+from error import *
 
 
-# The main Lexer Class
+####################################################
+#################### Lexer ########################
+####################################################
 class SoarLexer:
   # Initialize the lexer:
   def __init__(self, text):
@@ -72,7 +75,14 @@ class SoarLexer:
       elif self.current_char in DIGITS:
         # For this we would call the make number function below
         # to get the kind of number we are trying to tokenize
-        tokens.append(self.make_number())
+        result , err = self.make_number()
+
+        if err:
+          error = FloatError(self.pos)
+
+
+        else:
+          tokens.append(result)
 
     return tokens, error
 
@@ -109,11 +119,11 @@ class SoarLexer:
 
     # We would now return either a float type token or an int type depending
     # on the dot_count
-    if dot_count == 1:
-      return Token(TT_FLOAT, self.pos, num_string)
+    if dot_count > 0:
+      return Token(TT_FLOAT, self.pos, num_string), None
 
     else:
-      return Token(TT_INT, self.pos, num_string)
+      return Token(TT_INT, self.pos, num_string), None
 
       
         
