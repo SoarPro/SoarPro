@@ -9,6 +9,7 @@ result to the user.
 ####################################################
 from soartokens import *
 from error import *
+from position import *
 
 
 ####################################################
@@ -19,7 +20,7 @@ class SoarLexer:
   def __init__(self, text):
     self.text = text # This stands for the main source file
     self.current_char = None # Initialize the lexer with no variables
-    self.pos = -1 # This tracks the position.
+    self.pos = Position(-1, 0, 0) # This tracks the position.
     #It's set to -1 because it will increase to zero as we advance and....
     #Don't forget that python's index starts from 0. So when increased it defaults to zero the beginning of the file
     
@@ -28,12 +29,12 @@ class SoarLexer:
   # This methods updates the position of the lexer and the current character
   def advance(self):
     # Increase the position by 1
-    self.pos += 1
+    self.pos.advance(self.current_char)
     
     # Checks if we are not at the end of the file.
     # If we are at the end of the file it turns the current character to None
-    if self.pos < len(self.text):
-      self.current_char = self.text[self.pos]
+    if self.pos.index < len(self.text):
+      self.current_char = self.text[self.pos.index]
     else:
       self.current_char = None
 
@@ -52,49 +53,49 @@ class SoarLexer:
         # If found update the tokens list
         # Append the token with the coding instance class created in the SoarTokens class
         # And also don't forget to advance to the next token with the advance method
-        tokens.append(Token(TT_PLUS, self.pos))
+        tokens.append(Token(TT_PLUS, self.pos.copy()))
         self.advance()
       elif self.current_char == "-":
         # If found update the tokens list
         # Append the token with the coding instance class created in the SoarTokens class
         # And also don't forget to advance to the next token with the advance method
-        tokens.append(Token(TT_MINUS, self.pos))
+        tokens.append(Token(TT_MINUS, self.pos.copy()))
         self.advance()
       elif self.current_char == "*":
         # If found update the tokens list
         # Append the token with the coding instance class created in the SoarTokens class
         # And also don't forget to advance to the next token with the advance method
-        tokens.append(Token(TT_MUL, self.pos))
+        tokens.append(Token(TT_MUL, self.pos.copy()))
         self.advance()
       elif self.current_char == "/":
         # If found update the tokens list
         # Append the token with the coding instance class created in the SoarTokens class
         # And also don't forget to advance to the next token with the advance method
-        tokens.append(Token(TT_DIV, self.pos))
+        tokens.append(Token(TT_DIV, self.pos.copy()))
         self.advance()
       elif self.current_char == "(":
         # If found update the tokens list
         # Append the token with the coding instance class created in the SoarTokens class
         # And also don't forget to advance to the next token with the advance method
-        tokens.append(Token(TT_LPAREN, self.pos))
+        tokens.append(Token(TT_LPAREN, self.pos.copy()))
         self.advance()
       elif self.current_char == ")":
         # If found update the tokens list
         # Append the token with the coding instance class created in the SoarTokens class
         # And also don't forget to advance to the next token with the advance method
-        tokens.append(Token(TT_RPAREN, self.pos))
+        tokens.append(Token(TT_RPAREN, self.pos.copy()))
         self.advance()
       elif self.current_char in DIGITS:
         # For this we would call the make number function below
         # to get the kind of number we are trying to tokenize
         result , err = self.make_number()
         if err:
-          error = FloatError(self.pos)
+          error = FloatError(self.pos.copy())
         else:
           tokens.append(result)
 
       else:
-        error = BadCharacterError(self.pos, self.current_char)
+        error = BadCharacterError(self.pos.copy(), self.current_char)
         break
     return tokens, error
 
@@ -137,7 +138,7 @@ class SoarLexer:
       return None, error
 
     elif dot_count > 0:
-      return Token(TT_FLOAT, self.pos, num_string), None
+      return Token(TT_FLOAT, self.pos.copy(), num_string), None
 
     else:
-      return Token(TT_INT, self.pos, num_string), None
+      return Token(TT_INT, self.pos.copy(), num_string), None

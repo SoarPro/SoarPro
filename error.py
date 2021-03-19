@@ -5,7 +5,7 @@ class Error:
 
     def as_string(self):
         return f"""
-Error on line 1 index {self.pos}:
+Error on line {self.pos.lineno} index {self.pos.column}:
   {self.details}
         """
 
