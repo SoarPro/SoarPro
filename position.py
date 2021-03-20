@@ -21,7 +21,7 @@ class Position:
         # To zero if its encounters newline
         if current_char == "\n":
             self.lineno += 1
-            self.column += 1
+            self.column = 1
 
         return self
 

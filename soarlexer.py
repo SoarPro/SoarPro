@@ -20,7 +20,7 @@ class SoarLexer:
   def __init__(self, text):
     self.text = text # This stands for the main source file
     self.current_char = None # Initialize the lexer with no variables
-    self.pos = Position(-1, 0, 0) # This tracks the position.
+    self.pos = Position(-1, 1, 0) # This tracks the position.
     #It's set to -1 because it will increase to zero as we advance and....
     #Don't forget that python's index starts from 0. So when increased it defaults to zero the beginning of the file
     
@@ -47,6 +47,9 @@ class SoarLexer:
     while self.current_char != None:
       # The condition below Ignore spaces and tabs
       if self.current_char in " \t":
+        self.advance() # Call the advance method that moves to the next character
+      # Condition to see if the current character is a plus sign
+      elif self.current_char == "\n":
         self.advance() # Call the advance method that moves to the next character
       # Condition to see if the current character is a plus sign
       elif self.current_char == "+":
