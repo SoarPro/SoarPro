@@ -26,7 +26,7 @@ TT_PLUS = "PLUS" # addition symbol "+"
 TT_MINUS = "MINUS" # minus symbol "-"
 
 ####################################################
-############## Symbols #
+############## Symbols #############################
 ####################################################
 TT_LPAREN = "LPAREN" # left parentheses "("
 TT_RPAREN = "RPAREN" # right parentheses ")"
