@@ -17,3 +17,7 @@ class BadCharacterError(Error):
 class FloatError(Error):
     def __init__(self, pos):
         super().__init__(pos, "Invalid float", "Only one '.' is allowed")
+        
+class SyntaxError(Error):
+    def __init__(self, pos, message):
+        super().__init__(pos, message)

@@ -96,12 +96,51 @@ class SoarLexer:
           error = FloatError(self.pos.copy())
         else:
           tokens.append(result)
-
+      elif self.current_char in "\"\'":
+        # It should be able to parse strings, whether they
+        # use single quotes or double quotes
+        result, err = self.make_string()
+        
+        if err:
+          error = SyntaxError(self.pos.copy(), message)
+        else:
+          tokens.append(result)
       else:
         error = BadCharacterError(self.pos.copy(), self.current_char)
         break
     return tokens, error
-
+    
+  def make_string(self):
+    # The quote_symbol can either be single quotes or double quotes
+    quote_symbol = self.current_char
+    string = ""
+    
+    # move on to the next character after the opening quote
+    self.advance()
+    
+    error = None
+    
+    # Keep adding characters to the string until we reach the
+    # end of the string
+    while self.current_char != quote_symbol:
+      if self.current_char == None:
+        error = "String does not have closing quotation mark"
+        break
+      elif self.current_char == "\n":
+        error = "String cannot span more than one line"
+        break
+      else:
+        string.append(self.current_char())
+        self.advance()
+    
+    # we move on to the next character after the end of the string
+    self.advance()
+    
+    if error:
+      return None, error
+    else:
+      return Token(TT_STRING, self.pos.copy(), string), None
+  
   def make_number(self):
     # We will first save the number as a string and change it to 
     # either a float or an integer later
